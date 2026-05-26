@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/physics_simulation.dir/link.d CMakeFiles/physics_simulation.dir/src/main.cpp.o CMakeFiles/physics_simulation.dir/glad/src/glad.c.o -o physics_simulation  -lglfw /usr/lib/libglm.a /usr/lib/libGLX.so /usr/lib/libOpenGL.so
