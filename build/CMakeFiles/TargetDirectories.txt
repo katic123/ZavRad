@@ -1,3 +1,0 @@
-/home/leon/Desktop/6SEMESTAR/ZAVRAD_GLAD/build/CMakeFiles/physics_simulation.dir
-/home/leon/Desktop/6SEMESTAR/ZAVRAD_GLAD/build/CMakeFiles/edit_cache.dir
-/home/leon/Desktop/6SEMESTAR/ZAVRAD_GLAD/build/CMakeFiles/rebuild_cache.dir
