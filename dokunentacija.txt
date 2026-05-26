@@ -1,8 +1,0 @@
-Napravio sam cmake projekt pomocu vscode napravio sam CMakeLists.txt
-onda sam skinuo pomocu pacmana glfw i onda sam morao skinuti
-glad sa stranice i morao sam promjenit malo glad.c da tocno includea glad.h
-zatim sam morao u .vscode promjenit da rendera sa rtx 3060
-
-
-ericson algoritam
-https://stackoverflow.com/questions/2924795/fastest-way-to-compute-point-to-triangle-distance-in-3d
