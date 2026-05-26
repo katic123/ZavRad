@@ -112,7 +112,6 @@ public:
 
   float yaw = -90.0f;
   float pitch = 0.0f;
-
   Camera(glm::vec3 eye, glm::vec3 looking_at, glm::vec3 up) {
     this->eye = eye;
     this->looking_at = looking_at;
@@ -125,9 +124,11 @@ public:
 
   void moveCameraInDirection(float frontspeed, float rightspeed, float upspeed,
                              float deltaTime) {
-    eye += 100.0f*deltaTime * frontspeed * normalize(glm::vec3(front.x, 0, front.z));
-    eye += 100.0f*deltaTime * rightspeed * normalize(glm::vec3(right.x, 0, right.z));
-    eye += 100.0f*deltaTime * upspeed * up;
+    eye += 100.0f * deltaTime * frontspeed *
+           normalize(glm::vec3(front.x, 0, front.z));
+    eye += 100.0f * deltaTime * rightspeed *
+           normalize(glm::vec3(right.x, 0, right.z));
+    eye += 100.0f * deltaTime * upspeed * up;
     looking_at = eye + front;
   }
 
@@ -158,7 +159,8 @@ public:
 
   vector<float> sceneVertices;
   vector<unsigned int> sceneFaces;
-
+  Camera *camera;
+  Scene(Camera *camera) { this->camera = camera; }
   void addToScene(Mesh &mesh) {
     unsigned int offset = sceneVertices.size() / 6; // 6 = 3 pozicije + 3 boje
 
@@ -354,6 +356,11 @@ public:
       }
     }
   }
+  void shotBall(float radius, float speed) {
+    float mass = 0.9 * (4.0f / 3.0f) * M_PI * radius * radius * radius;
+    Sphere sphere(speed * camera->front, camera->eye, radius, mass);
+    this->addToMovingScene(sphere);
+  }
 };
 
 // loadaj shader
@@ -433,7 +440,7 @@ int main(int, char **) {
     cout << mesh.faces[i].x << " " << mesh.faces[i].y << " " << mesh.faces[i].z
          << endl;
   }
-  Scene scene;
+  Scene scene(&camera);
   scene.addToStaticScene(mesh);
   Mesh mesh2 = mesh;
   mesh2.moveMesh(glm::vec3(5.0f, 0.0f, 0.0f));
@@ -493,19 +500,19 @@ int main(int, char **) {
       camera.moveCameraInDirection(moveSpeed, 0, 0, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-      camera.moveCameraInDirection(-moveSpeed, 0, 0,deltaTime);
+      camera.moveCameraInDirection(-moveSpeed, 0, 0, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-      camera.moveCameraInDirection(0, -moveSpeed, 0,deltaTime);
+      camera.moveCameraInDirection(0, -moveSpeed, 0, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-      camera.moveCameraInDirection(0, moveSpeed, 0,deltaTime);
+      camera.moveCameraInDirection(0, moveSpeed, 0, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-      camera.moveCameraInDirection(0, 0, moveSpeed,deltaTime);
+      camera.moveCameraInDirection(0, 0, moveSpeed, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-      camera.moveCameraInDirection(0, 0, -moveSpeed,deltaTime);
+      camera.moveCameraInDirection(0, 0, -moveSpeed, deltaTime);
     }
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -529,13 +536,16 @@ int main(int, char **) {
 
     static double lastShot = 0;
     double nowShot = glfwGetTime();
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS and
-        nowShot - lastShot > 0.15) {
-      float mass = 0.9 * (4.0f / 3.0f) * M_PI * scrollOffset * scrollOffset *
-                   scrollOffset;
-      Sphere sphere(0.1f * camera.front, camera.eye, scrollOffset, mass);
-      scene.addToMovingScene(sphere);
-      lastShot = nowShot;
+    if (nowShot - lastShot > 0.15) {
+      if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+        scene.shotBall(scrollOffset, 0.2);
+        lastShot = nowShot;
+      } else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) ==
+                 GLFW_PRESS) {
+        scene.shotBall(scrollOffset, 0.06);
+        lastShot = nowShot;
+      }
+      
     }
 
     double time = glfwGetTime();
