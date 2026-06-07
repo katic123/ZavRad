@@ -239,53 +239,53 @@ public:
 
   static glm::vec3 closestPointOnTriangle(glm::vec3 a, glm::vec3 b, glm::vec3 c,
                                           glm::vec3 p) {
-    const glm::vec3 ab = b - a;
-    const glm::vec3 ac = c - a;
-    const glm::vec3 ap = p - a;
-    const float d1 = glm::dot(ab, ap);
-    const float d2 = glm::dot(ac, ap);
+    glm::vec3 ab = b - a;
+    glm::vec3 ac = c - a;
+    glm::vec3 ap = p - a;
+    float d1 = glm::dot(ab, ap);
+    float d2 = glm::dot(ac, ap);
     if (d1 <= 0.f and d2 <= 0.f)
       return a;
 
-    const glm::vec3 bp = p - b;
-    const float d3 = glm::dot(ab, bp);
-    const float d4 = glm::dot(ac, bp);
+    glm::vec3 bp = p - b;
+    float d3 = glm::dot(ab, bp);
+    float d4 = glm::dot(ac, bp);
     if (d3 >= 0.f and d4 <= d3)
       return b;
 
-    const glm::vec3 cp = p - c;
-    const float d5 = glm::dot(ab, cp);
-    const float d6 = glm::dot(ac, cp);
+    glm::vec3 cp = p - c;
+    float d5 = glm::dot(ab, cp);
+    float d6 = glm::dot(ac, cp);
     if (d6 >= 0.f and d5 <= d6)
       return c;
 
-    const float vc = d1 * d4 - d3 * d2;
+    float vc = d1 * d4 - d3 * d2;
     if (vc <= 0.f and d1 >= 0.f and d3 <= 0.f) {
-      const float v = d1 / (d1 - d3);
+      float v = d1 / (d1 - d3);
       return a + v * ab;
     }
 
-    const float vb = d5 * d2 - d1 * d6;
+    float vb = d5 * d2 - d1 * d6;
     if (vb <= 0.f and d2 >= 0.f and d6 <= 0.f) {
-      const float v = d2 / (d2 - d6);
+      float v = d2 / (d2 - d6);
       return a + v * ac;
     }
 
-    const float va = d3 * d6 - d5 * d4;
+    float va = d3 * d6 - d5 * d4;
     if (va <= 0.f and (d4 - d3) >= 0.f and (d5 - d6) >= 0.f) {
-      const float v = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+      float v = (d4 - d3) / ((d4 - d3) + (d5 - d6));
       return b + v * (c - b);
     }
 
-    const float denom = 1.f / (va + vb + vc);
-    const float v = vb * denom;
-    const float w = vc * denom;
+    float denom = 1.f / (va + vb + vc);
+    float v = vb * denom;
+    float w = vc * denom;
     return a + v * ab + w * ac;
   }
 
   void animateScene(double deltaTime) {
-    const double restitution = 0.4;
-    const float gravity = 0.001f;
+    float restitution = 0.4;
+    float gravity = 0.001f;
 
     for (int i = 0; i < movingMeshes.size(); i++) {
       movingMeshes[i].vel.y -= gravity * deltaTime * 60;
@@ -310,10 +310,11 @@ public:
 
             float vrel = glm::dot(v1 - v2, n);
             if (vrel < 0) {
-              float impact =
-                  -(1.0f + restitution) * vrel / (1.0f / m1 + 1.0f / m2);
-              movingMeshes[i].vel = v1 + (impact / m1) * n;
-              movingMeshes[j].vel = v2 - (impact / m2) * n;
+
+              glm::vec3 impact = (1.0f + restitution) * vrel/(m1+m2) * n;
+              movingMeshes[i].vel = v1 - m2*impact ;
+              movingMeshes[j].vel = v2 + m1*impact ;;
+
             }
 
             float penetration = rsum - dist;
@@ -347,7 +348,7 @@ public:
               float vn = glm::dot(vel, n);
               if (vn < 0) {
                 movingMeshes[i].vel =
-                    vel - (1.0f + (float)restitution) * vn * n;
+                    vel - (1.0f + restitution) * vn * n;
               }
               movingMeshes[i].moveMesh(-pen * n);
             }
@@ -425,7 +426,7 @@ void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
   }
 }
 
-int main(int, char **) {
+int main() {
   Mesh mesh;
   mesh.loadMesh("../src/objects/kocka.obj");
   mesh.scaleMesh(3);
@@ -542,10 +543,9 @@ int main(int, char **) {
         lastShot = nowShot;
       } else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) ==
                  GLFW_PRESS) {
-        scene.shotBall(scrollOffset, 0.06);
+        scene.shotBall(scrollOffset, 0.07);
         lastShot = nowShot;
       }
-      
     }
 
     double time = glfwGetTime();
@@ -604,10 +604,6 @@ int main(int, char **) {
       scene.animateScene(deltaTime);
     }
     scene.updateScene();
-    glm::mat4 model =
-        glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.5f, 1.0f, 0.0f));
-    glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE,
-                       glm::value_ptr(model));
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, scene.sceneFaces.size(), GL_UNSIGNED_INT, 0);
