@@ -236,55 +236,46 @@ public:
 
     offset = 0;
   }
-
   static glm::vec3 closestPointOnTriangle(glm::vec3 a, glm::vec3 b, glm::vec3 c,
                                           glm::vec3 p) {
     glm::vec3 ab = b - a;
     glm::vec3 ac = c - a;
-    glm::vec3 ap = p - a;
-    float d1 = glm::dot(ab, ap);
-    float d2 = glm::dot(ac, ap);
-    if (d1 <= 0.f and d2 <= 0.f)
+    glm::vec3 bc = c - b;
+
+    float snom = glm::dot(p - a, ab), sdenom = glm::dot(p - b, a - b);
+    float tnom = glm::dot(p - a, ac), tdenom = glm::dot(p - c, a - c);
+
+    if (snom <= 0.f && tnom <= 0.f)
       return a;
 
-    glm::vec3 bp = p - b;
-    float d3 = glm::dot(ab, bp);
-    float d4 = glm::dot(ac, bp);
-    if (d3 >= 0.f and d4 <= d3)
-      return b;
+    float unom = glm::dot(p - b, bc), udenom = glm::dot(p - c, b - c);
 
-    glm::vec3 cp = p - c;
-    float d5 = glm::dot(ab, cp);
-    float d6 = glm::dot(ac, cp);
-    if (d6 >= 0.f and d5 <= d6)
+    if (sdenom <= 0.f && unom <= 0.f)
+      return b;
+    if (tdenom <= 0.f && udenom <= 0.f)
       return c;
 
-    float vc = d1 * d4 - d3 * d2;
-    if (vc <= 0.f and d1 >= 0.f and d3 <= 0.f) {
-      float v = d1 / (d1 - d3);
-      return a + v * ab;
-    }
+    glm::vec3 n = glm::cross(b - a, c - a);
+    float vc = glm::dot(n, glm::cross(a - p, b - p));
+    if (vc <= 0.f && snom >= 0.f && sdenom >= 0.f)
+      return a + snom / (snom + sdenom) * ab;
 
-    float vb = d5 * d2 - d1 * d6;
-    if (vb <= 0.f and d2 >= 0.f and d6 <= 0.f) {
-      float v = d2 / (d2 - d6);
-      return a + v * ac;
-    }
+    float va = glm::dot(n, glm::cross(b - p, c - p));
+    if (va <= 0.f && unom >= 0.f && udenom >= 0.f)
+      return b + unom / (unom + udenom) * bc;
 
-    float va = d3 * d6 - d5 * d4;
-    if (va <= 0.f and (d4 - d3) >= 0.f and (d5 - d6) >= 0.f) {
-      float v = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-      return b + v * (c - b);
-    }
+    float vb = glm::dot(n, glm::cross(c - p, a - p));
+    if (vb <= 0.f && tnom >= 0.f && tdenom >= 0.f)
+      return a + tnom / (tnom + tdenom) * ac;
 
-    float denom = 1.f / (va + vb + vc);
-    float v = vb * denom;
-    float w = vc * denom;
-    return a + v * ab + w * ac;
+    float u = va / (va + vb + vc);
+    float v = vb / (va + vb + vc);
+    float w = 1.f - u - v;
+    return u * a + v * b + w * c;
   }
 
   void animateScene(double deltaTime) {
-    float restitution = 0.4;
+    double restitution = 0.4;
     float gravity = 0.001f;
 
     for (int i = 0; i < movingMeshes.size(); i++) {
@@ -310,11 +301,10 @@ public:
 
             float vrel = glm::dot(v1 - v2, n);
             if (vrel < 0) {
-
-              glm::vec3 impact = (1.0f + restitution) * vrel/(m1+m2) * n;
-              movingMeshes[i].vel = v1 - m2*impact ;
-              movingMeshes[j].vel = v2 + m1*impact ;;
-
+              float impulse =
+                  -(1.0f + restitution) * vrel / (1.0f / m1 + 1.0f / m2);
+              movingMeshes[i].vel = v1 + (impulse / m1) * n;
+              movingMeshes[j].vel = v2 - (impulse / m2) * n;
             }
 
             float penetration = rsum - dist;
@@ -348,7 +338,7 @@ public:
               float vn = glm::dot(vel, n);
               if (vn < 0) {
                 movingMeshes[i].vel =
-                    vel - (1.0f + restitution) * vn * n;
+                    vel - (1.0f + (float)restitution) * vn * n;
               }
               movingMeshes[i].moveMesh(-pen * n);
             }
