@@ -335,9 +335,9 @@ public:
               glm::vec3 n = glm::normalize(movingMeshes[i].center - p);
               glm::vec3 vel = movingMeshes[i].vel;
 
-              float vn = glm::dot(vel, n);
-              if (vn < 0) {
-                movingMeshes[i].vel = vel - (1.0f + restitution) * vn * n;
+              float vrel = glm::dot(vel, n);
+              if (vrel < 0) {
+                movingMeshes[i].vel = vel - (1.0f + restitution) * vrel * n;
               }
               movingMeshes[i].moveMesh(-pen * n);
             }
