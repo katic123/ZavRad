@@ -275,7 +275,7 @@ public:
   }
 
   void animateScene(double deltaTime) {
-    double restitution = 0.4;
+    float restitution = 0.4;
     float gravity = 0.001f;
 
     for (int i = 0; i < movingMeshes.size(); i++) {
@@ -337,8 +337,7 @@ public:
 
               float vn = glm::dot(vel, n);
               if (vn < 0) {
-                movingMeshes[i].vel =
-                    vel - (1.0f + (float)restitution) * vn * n;
+                movingMeshes[i].vel = vel - (1.0f + restitution) * vn * n;
               }
               movingMeshes[i].moveMesh(-pen * n);
             }
