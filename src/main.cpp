@@ -24,7 +24,6 @@ public:
 
   int loadMesh(const std::string &filepath) {
     cout << "Loading file: " << filepath << endl;
-
     ifstream file(filepath);
     if (!file.is_open()) {
       cout << "Failed to open file: " << filepath << endl;
@@ -52,7 +51,6 @@ public:
         }
       }
     }
-
     cout << "Loaded " << vertices.size() << " vertices, " << faces.size()
          << " faces" << endl;
     return 0;

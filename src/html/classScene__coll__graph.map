@@ -1,0 +1,5 @@
+<map id="Scene" name="Scene">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,317,185,685"/>
+<area shape="rect" id="Node000002" href="$classCamera.html" title=" " alt="" coords="9,5,182,245"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,243,98,301,93,300,95,248"/>
+</map>
