@@ -206,11 +206,11 @@ public:
         sceneVertices.push_back(meshes[i].vertices[j].z);
 
         // r
-        sceneVertices.push_back(1.0f);
+        sceneVertices.push_back(0.0f);
         // g
-        sceneVertices.push_back(1.0f);
+        sceneVertices.push_back(0.0f);
         // b
-        sceneVertices.push_back(1.0f);
+        sceneVertices.push_back(0.0f);
       }
       for (int j = 0; j < meshes[i].faces.size(); j++) {
         // f_v1
@@ -557,11 +557,9 @@ int main() {
                        glm::value_ptr(projection));
 
     glBindVertexArray(VAO);
-
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * scene.sceneVertices.size(),
                  scene.sceneVertices.data(), GL_STATIC_DRAW);
-
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                  sizeof(unsigned int) * scene.sceneFaces.size(),
@@ -578,7 +576,7 @@ int main() {
     glBindVertexArray(0);
     glEnable(GL_DEPTH_TEST);
     glfwPollEvents();
-
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shader);
 
