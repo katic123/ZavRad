@@ -168,9 +168,9 @@ public:
       sceneVertices.push_back(mesh.vertices[j].y);
       sceneVertices.push_back(mesh.vertices[j].z);
 
-      sceneVertices.push_back(0.0f);
-      sceneVertices.push_back(0.0f);
-      sceneVertices.push_back(0.0f);
+      sceneVertices.push_back(1.0f);
+      sceneVertices.push_back(1.0f);
+      sceneVertices.push_back(1.0f);
     }
 
     for (int j = 0; j < mesh.faces.size(); j++) {
@@ -206,11 +206,11 @@ public:
         sceneVertices.push_back(meshes[i].vertices[j].z);
 
         // r
-        sceneVertices.push_back(0.0f);
+        sceneVertices.push_back(1.0f);
         // g
-        sceneVertices.push_back(0.0f);
+        sceneVertices.push_back(1.0f);
         // b
-        sceneVertices.push_back(0.0f);
+        sceneVertices.push_back(1.0f);
       }
       for (int j = 0; j < meshes[i].faces.size(); j++) {
         // f_v1
@@ -576,7 +576,7 @@ int main() {
     glBindVertexArray(0);
     glEnable(GL_DEPTH_TEST);
     glfwPollEvents();
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shader);
 
