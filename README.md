@@ -18,4 +18,7 @@ composed of static objects.
 
 
 https://www.zemris.fer.hr/predmeti/irg/Zavrsni/26_Katic/Final_0036559392_73.pdf
-- link to my final paper
+
+| https://www.zemris.fer.hr/predmeti/irg/Zavrsni/26_Katic/Final_0036559392_73.pdf |
+| :---: |
+| link to my final paper |
