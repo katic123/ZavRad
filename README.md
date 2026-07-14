@@ -17,7 +17,6 @@ composed of static objects.
 | UML diagram of classes |
 
 
-https://www.zemris.fer.hr/predmeti/irg/Zavrsni/26_Katic/Final_0036559392_73.pdf
 
 | https://www.zemris.fer.hr/predmeti/irg/Zavrsni/26_Katic/Final_0036559392_73.pdf |
 | :---: |
