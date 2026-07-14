@@ -10,3 +10,4 @@ algorithm based on Voronoi regions from Ericson's Real-Time Collision Detection.
 resolution is based on conservation of momentum with an elasticity parameter. The user is
 provided with interactive camera control and the ability to launch spheres into a scene
 composed of static objects.
+<img width="595" height="482" alt="image" src="https://github.com/user-attachments/assets/1845da44-2485-454e-ab2d-693af84b38db" />
