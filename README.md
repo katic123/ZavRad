@@ -1,2 +1,12 @@
 # ZavRad
 Fizikalno temeljena simulacija čvrstih tijela
+
+The simulation is built in C++ using the OpenGL, GLFW and
+GLM libraries for rendering and mathematical operations. The theoretical foundation covers
+vector algebra, camera transformation matrices and the physical model of motion and
+collision. Two types of collision detection and resolution are implemented — sphere-sphere
+and sphere-static object — where the closest point on a triangle is determined using an
+algorithm based on Voronoi regions from Ericson's Real-Time Collision Detection. Collision
+resolution is based on conservation of momentum with an elasticity parameter. The user is
+provided with interactive camera control and the ability to launch spheres into a scene
+composed of static objects.
