@@ -29,8 +29,8 @@ composed of static objects.
 
 | https://www.zemris.fer.hr/predmeti/irg/Zavrsni/26_Katic/Final_0036559392_73.pdf |
 | :---: |
-| link to my final paper |
+| Link to my final paper |
 
 | https://github.com/user-attachments/assets/a20be2b7-48e9-4ab8-9f6b-9f18bca85da3 |
 | :---: |
-| Demo Video |
+| Demo video |
